@@ -8,8 +8,12 @@ export default class UserService implements IUserService {
   }
 
   async login({ email, password }: IloginUser): Promise<IloginUser> {
-    const user: User = await this.modelUser.findOne({ where: { email, password } });
+    console.log(email);
 
+    const user: User | null = await this.modelUser.findOne({ where: { email } });
+    if (user) { console.log(`encontrou usuario DB ${user}`); }
+
+    const token = '123456';
     return {
       email,
       password,
