@@ -8,33 +8,38 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      home_team: {
+      homeTeam: {
         type: Sequelize.NUMBER,
         allowNull: false, 
+        field:'home_team',
         references: {
           model: 'teams',
           key: 'id',
         }
       },
-      home_team_goals: {
+      homeTeamGoals: {
         type: Sequelize.NUMBER,
-        allowNull: false
+        allowNull: false,
+        field:'home_team_goals',
       },
-      away_team: {
+      awayTeam: {
         type: Sequelize.NUMBER,
         allowNull: false, 
+        field:'away_team',
         references: {
           model: 'teams',
           key: 'id',
         }
       },
-      away_team_goals: {
+      awayTeamGoals: {
         type: Sequelize.NUMBER,
-        allowNull: false
+        allowNull: false,
+        field:'away_team_goals',
       },
-      in_progress: {
+      inProgress: {
         type: Sequelize.NUMBER,
-        allowNull: false
+        allowNull: false,
+        field:'in_progress',
       },
       createdAt: {
         allowNull: false,
