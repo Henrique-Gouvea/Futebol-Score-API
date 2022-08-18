@@ -1,4 +1,4 @@
-import { Model, INTEGER, DATE } from 'sequelize';
+import { Model, INTEGER } from 'sequelize';
 import db from '.';
 import Teams from './teams';
 
@@ -36,14 +36,6 @@ Matches.init({
   inProgress: {
     type: INTEGER,
     allowNull: false,
-  },
-  createdAt: {
-    allowNull: false,
-    type: DATE,
-  },
-  updatedAt: {
-    allowNull: false,
-    type: DATE,
   },
 }, {
   underscored: true,

@@ -15,7 +15,9 @@ module.exports = {
         references: {
           model: 'teams',
           key: 'id',
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       homeTeamGoals: {
         type: Sequelize.INTEGER,
@@ -29,7 +31,9 @@ module.exports = {
         references: {
           model: 'teams',
           key: 'id',
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       awayTeamGoals: {
         type: Sequelize.INTEGER,
@@ -40,14 +44,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         field:'in_progress',
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },

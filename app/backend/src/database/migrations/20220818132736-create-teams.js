@@ -12,14 +12,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         field:'team_name',
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },
