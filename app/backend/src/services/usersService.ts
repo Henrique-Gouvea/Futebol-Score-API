@@ -10,6 +10,7 @@ export default class UserService implements IUserService {
 
   async login({ email, password }: IloginUser): Promise<IloginUser> {
     loginValidate({ email, password });
+    // if (!email) throw new HandleError('ValidationError', 'All fields must be filled');
 
     const user: User | null = await this.modelUser.findOne({ where: { email } });
     if (user) { console.log(`encontrou usuario DB ${user}`); }

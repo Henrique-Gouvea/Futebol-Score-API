@@ -1,7 +1,6 @@
 import { ErrorRequestHandler } from 'express';
 
-const errorMiddleware: ErrorRequestHandler = async (err, _req, res) => {
-  console.log('trddddddddddddddddddddd');
+const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
   const { name, message } = err;
   console.log(`name: ${name}`);
 
