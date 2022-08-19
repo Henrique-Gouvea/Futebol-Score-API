@@ -1,5 +1,5 @@
-import { IloginUser } from './User';
+// import { IloginUser } from './User';
 
-export interface IUserValidation {
-  validate(user: IloginUser): void;
-}
+// export interface IUserValidation {
+//   validate(user: IloginUser): void;
+// }
