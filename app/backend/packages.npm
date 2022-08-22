@@ -1,3 +1,5 @@
 joi
 @types/joi
 express-async-errors
+jsonwebtoken
+@types/jsonwebtoken

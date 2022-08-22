@@ -2,8 +2,11 @@ import { Router } from 'express';
 import UserController from '../controllers/usersController';
 import UserService from '../services/usersService';
 import 'express-async-errors';
+import TokenProvider from '../providers/tokenProvider';
 
-const userService = new UserService();
+const tokenProv = new TokenProvider();
+
+const userService = new UserService(tokenProv);
 const userController = new UserController(userService);
 
 const loginRouter = Router();

@@ -3,9 +3,11 @@ import User from '../database/models/users';
 import { IUserService } from '../interfaces/User/UserService';
 // import { IUserValidation } from '../interfaces/User/UserValidation';
 import loginValidate from '../validation/schemas/loginSchema';
+import { IToken } from '../interfaces/IToken';
 
 export default class UserService implements IUserService {
   constructor(
+    private token: IToken,
     private modelUser = User,
   ) {
     this.modelUser = modelUser;
@@ -16,12 +18,14 @@ export default class UserService implements IUserService {
     // if (!email) throw new HandleError('ValidationError', 'All fields must be filled');
     console.log(password);
     console.log('teste');
+    console.log(this.token);
 
-    const user: User | null = await this.modelUser.findOne({ where: { email } });
+    const user: User | null = await User.findOne({ where: { email } });
     if (user) { console.log(`encontrou usuario DB ${user.password}`); }
     console.log(password);
 
-    const token = '123456';
+    const token = await this.token.generateToken(email);
+
     return {
       email,
       password,
