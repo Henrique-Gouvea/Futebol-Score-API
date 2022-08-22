@@ -1,6 +1,6 @@
 import { sign } from 'jsonwebtoken';
 import 'dotenv/config';
-import { IToken } from '../interfaces/IToken';
+import { IToken } from '../interfaces/Providers/IToken';
 
 class tokenProvider implements IToken {
   private jwtSecret: string;
@@ -13,7 +13,6 @@ class tokenProvider implements IToken {
       expiresIn: '5d',
       algorithm: 'HS256',
     });
-    console.log(token);
 
     return token;
   }

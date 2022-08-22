@@ -3,11 +3,14 @@ import User from '../database/models/users';
 import { IUserService } from '../interfaces/User/UserService';
 // import { IUserValidation } from '../interfaces/User/UserValidation';
 import loginValidate from '../validation/schemas/loginSchema';
-import { IToken } from '../interfaces/IToken';
+import { IToken } from '../interfaces/Providers/IToken';
+import { ICrypto } from '../interfaces/Providers/ICrypto';
+import HandleError from '../interfaces/Error/handleError';
 
 export default class UserService implements IUserService {
   constructor(
     private token: IToken,
+    private crypto: ICrypto,
     private modelUser = User,
   ) {
     this.modelUser = modelUser;
@@ -21,7 +24,9 @@ export default class UserService implements IUserService {
     console.log(this.token);
 
     const user: User | null = await User.findOne({ where: { email } });
-    if (user) { console.log(`encontrou usuario DB ${user.password}`); }
+    if (!user) {
+      throw new HandleError('Unauthorized', 'Incorrect email or password');
+    }
     console.log(password);
 
     const token = await this.token.generateToken(email);
