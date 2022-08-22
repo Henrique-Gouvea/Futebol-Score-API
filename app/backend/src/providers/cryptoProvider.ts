@@ -1,13 +1,18 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
+import { ICrypto } from '../interfaces/Providers/ICrypto';
 
 class cryptoProvider implements ICrypto {
-  private bcrypt: string;
-  constructor() {
-    this.bcrypt = bcrypt;
+  constructor(private teste:string = 'teste') {
+
   }
 
   comparePassword(password: string, passwordHash: string):boolean {
-    return this.bcrypt.compareSync(password, passwordHash);
+    console.log(this.teste);
+    console.log(password);
+    console.log(passwordHash);
+    console.log(bcrypt.compareSync(password, passwordHash));
+
+    return password === passwordHash;
   }
 }
 

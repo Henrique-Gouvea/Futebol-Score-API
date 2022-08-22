@@ -18,16 +18,17 @@ export default class UserService implements IUserService {
 
   async login({ email, password }: IloginUser): Promise<IloginUser> {
     loginValidate({ email, password });
-    // if (!email) throw new HandleError('ValidationError', 'All fields must be filled');
-    console.log(password);
-    console.log('teste');
-    console.log(this.token);
 
     const user: User | null = await User.findOne({ where: { email } });
-    if (!user) {
+    let valid = false;
+    if (user) {
+      valid = this.crypto.comparePassword(password, user.password);
+    }
+    console.log(valid);
+
+    if (!valid || !user) {
       throw new HandleError('Unauthorized', 'Incorrect email or password');
     }
-    console.log(password);
 
     const token = await this.token.generateToken(email);
 
