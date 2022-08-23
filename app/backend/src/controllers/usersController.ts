@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import Users from '../database/models/users';
 import { IUserService } from '../interfaces/User/UserService';
 
 export default class UserController {
@@ -13,11 +14,12 @@ export default class UserController {
     }
   }
 
-  validate(req: Request, res: Response, _next: NextFunction): Response | void {
+  async validate(req: Request, res: Response, _next: NextFunction): Promise<Response | void> {
     console.log(this.login);
 
     const { user } = req.body;
+    const { role } = await Users.findOne({ where: { email: user } }) as Users;
 
-    res.status(200).json({ role: user });
+    res.status(200).json({ role });
   }
 }

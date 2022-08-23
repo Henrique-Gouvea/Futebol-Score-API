@@ -18,7 +18,6 @@ class tokenMiddleware {
 
       const data = await this.token.checkToken(authHeader);
       req.body.user = data;
-      console.log(data);
 
       next();
     } catch (err) {

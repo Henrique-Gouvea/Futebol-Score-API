@@ -23,6 +23,7 @@ class tokenProvider implements IToken {
       const response = verify(token, this.jwtSecret);
       if (!response) throw new HandleError('Unauthorized', 'Token must be a valid token');
       const { data } = response as JwtPayload;
+
       return data;
     } catch (err) {
       throw new HandleError('Unauthorized', 'Token must be a valid token');
