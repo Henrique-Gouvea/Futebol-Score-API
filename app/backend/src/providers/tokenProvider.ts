@@ -1,6 +1,7 @@
-import { sign } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import 'dotenv/config';
 import { IToken } from '../interfaces/Providers/IToken';
+import HandleError from '../interfaces/Error/handleError';
 
 class tokenProvider implements IToken {
   private jwtSecret: string;
@@ -15,6 +16,18 @@ class tokenProvider implements IToken {
     });
 
     return token;
+  }
+
+  checkToken(token: string): string | JwtPayload {
+    try {
+      console.log(token);
+      const response = verify(token, this.jwtSecret);
+      if (!response) throw new HandleError('Unauthorized', 'Token must be a valid token');
+      const { data } = response as JwtPayload;
+      return data;
+    } catch (err) {
+      throw new HandleError('Unauthorized', 'Token must be a valid token');
+    }
   }
 }
 
