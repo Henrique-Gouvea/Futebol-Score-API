@@ -1,14 +1,15 @@
 import * as express from 'express';
+import 'express-async-errors';
+import * as cors from 'cors';
 import loginRouter from './routes/loginRouter';
 import errorMiddleware from './middleware/errorMiddleware';
-import 'express-async-errors';
 
 class App {
   public app: express.Express;
 
   constructor() {
     this.app = express();
-
+    this.app.use(cors());
     this.config();
     this.app.use('/login', loginRouter);
     this.app.use(errorMiddleware);
