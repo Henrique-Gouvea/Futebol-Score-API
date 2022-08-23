@@ -8,11 +8,7 @@ class cryptoProvider implements ICrypto {
 
   comparePassword(password: string, passwordHash: string):boolean {
     console.log(this.teste);
-    console.log(password);
-    console.log(passwordHash);
-    console.log(bcrypt.compareSync(password, passwordHash));
-
-    return password === passwordHash;
+    return bcrypt.compareSync(password, passwordHash);
   }
 }
 

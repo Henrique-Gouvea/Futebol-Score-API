@@ -2,13 +2,16 @@ import * as Joi from 'joi';
 import { IloginUser } from '../../interfaces/User/User';
 import HandleError from '../../interfaces/Error/handleError';
 
+const messageErr = 'All fields must be filled';
+
 const loginSchema = Joi.object({
   email: Joi
     .string()
     .email()
     .required()
     .messages({
-      'any.required': 'All fields must be filled',
+      'string.empty': messageErr,
+      'any.required': messageErr,
     }),
 
   password: Joi
@@ -16,7 +19,8 @@ const loginSchema = Joi.object({
     .min(6)
     .required()
     .messages({
-      'any.required': 'All fields must be filled',
+      'string.empty': messageErr,
+      'any.required': messageErr,
     }),
 });
 

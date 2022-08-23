@@ -16,7 +16,7 @@ const loginRouter = Router();
 
 loginRouter.post('/', (req, res, next) => userController.login(req, res, next));
 
-// loginRouter.use((req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next));
+loginRouter.use((req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next));
 
 loginRouter.get(
   '/validate',
