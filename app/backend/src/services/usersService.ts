@@ -24,7 +24,6 @@ export default class UserService implements IUserService {
     if (user) {
       valid = this.crypto.comparePassword(password, user.password);
     }
-    console.log(valid);
 
     if (!valid || !user) {
       throw new HandleError('Unauthorized', 'Incorrect email or password');

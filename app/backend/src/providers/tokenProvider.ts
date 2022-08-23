@@ -18,9 +18,8 @@ class tokenProvider implements IToken {
     return token;
   }
 
-  checkToken(token: string): string | JwtPayload {
+  checkToken(token: string): string {
     try {
-      console.log(token);
       const response = verify(token, this.jwtSecret);
       if (!response) throw new HandleError('Unauthorized', 'Token must be a valid token');
       const { data } = response as JwtPayload;

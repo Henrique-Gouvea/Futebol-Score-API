@@ -1,6 +1,4 @@
-import { JwtPayload } from 'jsonwebtoken';
-
-export interface IToken {
+export interface IToken{
   generateToken(email: string): string;
-  checkToken(token:string):string | JwtPayload ;
+  checkToken(token:string):string;
 }

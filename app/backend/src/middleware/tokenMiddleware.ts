@@ -8,7 +8,7 @@ class tokenMiddleware {
     private token: IToken,
   ) { }
 
-  checkTokenMiddleware(req: Request, res: Response, next: NextFunction):void {
+  async checkTokenMiddleware(req: Request, res: Response, next: NextFunction):Promise<void> {
     try {
       const authHeader = req.headers.authorization;
 
@@ -16,11 +16,9 @@ class tokenMiddleware {
         throw new HandleError('Unauthorized', 'Invalid token');
       }
 
-      console.log(authHeader);
-
-      const data = this.token.checkToken(authHeader);
+      const data = await this.token.checkToken(authHeader);
       req.body.user = data;
-      // console.log(data);
+      console.log(data);
 
       next();
     } catch (err) {
