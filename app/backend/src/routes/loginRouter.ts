@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import UserController from '../controllers/usersController';
 import UserService from '../services/usersService';
-import 'express-async-errors';
 import TokenProvider from '../providers/tokenProvider';
 import CryptoProvider from '../providers/cryptoProvider';
 import TokenMiddleware from '../middleware/tokenMiddleware';
@@ -21,7 +20,7 @@ loginRouter.post('/', (req, res, next) => userController.login(req, res, next));
 
 loginRouter.get(
   '/validate',
-  (req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next),
+  // (req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next),
   (req, res, next) => userController.validate(req, res, next),
 );
 
