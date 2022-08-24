@@ -16,4 +16,6 @@ teamsRouter.use((req, res, next) => tokenMiddleware.checkTokenMiddleware(req, re
 
 teamsRouter.get('/', (req, res, next) => teamsController.getAll(req, res, next));
 
+teamsRouter.get('/:id', (req, res, next) => teamsController.getById(req, res, next));
+
 export default teamsRouter;
