@@ -56,7 +56,7 @@ export default class MatchesController {
     try {
       const data = req.body;
       const matchCreated = await this.matchesService.createMatchProgress(data);
-      return res.status(201).json(matchCreated);
+      return res.status(200).json(matchCreated);
     } catch (error) {
       next(error);
     }
