@@ -1,3 +1,4 @@
+import HandleError from '../interfaces/Error/handleError';
 import Teams from '../database/models/teams';
 import { ITeamService } from '../interfaces/Teams/TeamsService';
 
@@ -11,8 +12,9 @@ export default class TeamsService implements ITeamService<Teams> {
     return teams;
   }
 
-  async getById(id: number): Promise<Teams | null > {
+  async getById(id: number): Promise<Teams > {
     const team = await this.modelTeams.findOne({ where: { id } });
+    if (!team) throw new HandleError('NotFound', 'Not Found');
     return team;
   }
 }

@@ -11,11 +11,13 @@ const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
     case 'Unauthorized':
       res.status(401).json({ message });
       break;
+    case 'NotFound':
+      res.status(404).json({ message });
+      break;
     case 'UnprocessableEntity':
       res.status(422).json({ message });
       break;
     default:
-      console.error(err);
       res.sendStatus(500);
   }
 };
