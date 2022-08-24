@@ -26,4 +26,19 @@ export default class MatchesController {
 
     res.status(200).json(team);
   }
+
+  async updateProgress(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    try {
+      const { id } = req.params;
+      console.log(req.params);
+      await this.matchesService.updateProgress(Number(id), false);
+      return res.status(200).json({ message: 'Finished' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // async updateGoals(req: Request, res: Response, _next: NextFunction): Promise<Response | void> {
+  //   await this.modelMatches.update({ ...data }, { where: { id } });
+  // }
 }

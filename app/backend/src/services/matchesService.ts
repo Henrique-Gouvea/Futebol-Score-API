@@ -22,4 +22,12 @@ export default class MatchesService implements IMatcheservice<Matches> {
     const matchs = await this.modelMatches.findAll({ where: { inProgress } });
     return matchs;
   }
+
+  async updateProgress(id: number, finish: boolean): Promise<void> {
+    await this.modelMatches.update({ inProgress: finish }, { where: { id } });
+  }
+
+  // async updateGoals(id: number, data: GoalsMatches): Promise<void> {
+  //   await this.modelMatches.update({ ...data }, { where: { id } });
+  // }
 }
