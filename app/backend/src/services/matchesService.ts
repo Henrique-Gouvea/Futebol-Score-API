@@ -1,4 +1,4 @@
-import { GoalsMatches } from '../interfaces/Matches/Matches';
+import { CreateMatches, GoalsMatches } from '../interfaces/Matches/Matches';
 import HandleError from '../interfaces/Error/handleError';
 import Matches from '../database/models/matches';
 import { IMatcheservice } from '../interfaces/Matches/MatchesService';
@@ -29,6 +29,10 @@ export default class MatchesService implements IMatcheservice<Matches> {
   }
 
   async updateGoals(id: number, data: GoalsMatches): Promise<void> {
+    await this.modelMatches.update({ ...data }, { where: { id } });
+  }
+
+  async createMatchProgress(data: CreateMatches): Promise<void> {
     await this.modelMatches.update({ ...data }, { where: { id } });
   }
 }
