@@ -1,16 +1,19 @@
+import { ITeam } from '../interfaces/Teams/Teams';
 import { CreateMatches, GoalsMatches } from '../interfaces/Matches/Matches';
 import HandleError from '../interfaces/Error/handleError';
 import Matches from '../database/models/matches';
 import { IMatcheservice } from '../interfaces/Matches/MatchesService';
 import Teams from '../database/models/teams';
 import { ITeamService } from '../interfaces/Teams/TeamsService';
+import TeamsService from './teamsService';
 
 export default class MatchesService implements IMatcheservice<Matches> {
+  private teamService: ITeamService<Teams | ITeam>;
   constructor(
     private modelMatches = Matches,
-    private teamService: ITeamService<Teams>,
   ) {
     this.modelMatches = modelMatches;
+    this.teamService = new TeamsService();
   }
 
   async getAll() : Promise<Matches[]> {
@@ -37,7 +40,7 @@ export default class MatchesService implements IMatcheservice<Matches> {
     await this.modelMatches.update({ ...data }, { where: { id } });
   }
 
-  async createMatchProgress(data: CreateMatches): Promise<void> {
+  async createMatchProgress(data: CreateMatches): Promise<CreateMatches> {
     const { homeTeam, awayTeam } = data;
     if (homeTeam === awayTeam) {
       throw new HandleError(
@@ -45,10 +48,17 @@ export default class MatchesService implements IMatcheservice<Matches> {
         'It is not possible to create a match with two equal teams',
       );
     }
+    try {
+      await this.teamService.getById(homeTeam);
+      await this.teamService.getById(awayTeam);
+    } catch (error) {
+      throw new HandleError(
+        'Unauthorized',
+        'There is no team with such id!',
+      );
+    }
 
-    await this.teamService.getById(homeTeam);
-    await this.teamService.getById(awayTeam);
-
-    await this.modelMatches.create({ ...data, inProgress: true });
+    const matchCreated = await this.modelMatches.create({ ...data, inProgress: true });
+    return matchCreated;
   }
 }

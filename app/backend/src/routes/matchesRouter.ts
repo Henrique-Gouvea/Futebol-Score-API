@@ -26,4 +26,6 @@ matchesRouter.patch(
 
 matchesRouter.use((req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next));
 
+matchesRouter.post('/', (req, res, next) => matchesController.createMatchProgress(req, res, next));
+
 export default matchesRouter;

@@ -6,5 +6,5 @@ export interface IMatcheservice<T>{
   getByProgress(inProgress: boolean): Promise<T[]>
   updateProgress(id: number, finish: boolean): Promise<void>
   updateGoals(id: number, data: GoalsMatches): Promise<void>
-  createMatchProgress(data: CreateMatches): Promise<void>
+  createMatchProgress(data: CreateMatches): Promise<CreateMatches>
 }
