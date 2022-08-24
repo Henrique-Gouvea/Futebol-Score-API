@@ -1,6 +1,6 @@
 import HandleError from '../interfaces/Error/handleError';
 import Matches from '../database/models/matches';
-import { IMatcheservice } from '../interfaces/Matches.ts/MatchesService';
+import { IMatcheservice } from '../interfaces/Matches/MatchesService';
 
 export default class MatchesService implements IMatcheservice<Matches> {
   constructor(private modelMatches = Matches) {
