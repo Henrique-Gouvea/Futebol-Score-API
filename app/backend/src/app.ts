@@ -2,6 +2,7 @@ import * as express from 'express';
 import 'express-async-errors';
 import * as cors from 'cors';
 import loginRouter from './routes/loginRouter';
+import teamsRouter from './routes/teamsRouter';
 import errorMiddleware from './middleware/errorMiddleware';
 
 class App {
@@ -12,6 +13,8 @@ class App {
     this.app.use(cors());
     this.config();
     this.app.use('/login', loginRouter);
+    this.app.use('/teams', teamsRouter);
+
     this.app.use(errorMiddleware);
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));

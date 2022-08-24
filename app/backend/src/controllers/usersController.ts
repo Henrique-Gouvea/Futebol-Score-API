@@ -18,7 +18,7 @@ export default class UserController {
     console.log(this.login);
 
     const { user } = req.body;
-    const { role } = await Users.findOne({ where: { email: user } }) as Users;
+    const { role } = await Users.findOne({ where: { email: user } }) as Users;// Lembrar criar uma interface para sequelize depois
 
     res.status(200).json({ role });
   }
