@@ -1,6 +1,6 @@
 import HandleError from '../interfaces/Error/handleError';
 import Matches from '../database/models/matches';
-import { IMatcheservice } from '../interfaces/Matches/MatchesService';
+import { IMatcheservice } from '../interfaces/Matches.ts/MatchesService';
 
 export default class MatchesService implements IMatcheservice<Matches> {
   constructor(private modelMatches = Matches) {
@@ -16,5 +16,10 @@ export default class MatchesService implements IMatcheservice<Matches> {
     const match = await this.modelMatches.findOne({ where: { id } });
     if (!match) throw new HandleError('NotFound', 'Not Found');
     return match;
+  }
+
+  async getByProgress(): Promise<Matches[]> {
+    const matchs = await this.modelMatches.findAll({ where: { inProgress: true } });
+    return matchs;
   }
 }
