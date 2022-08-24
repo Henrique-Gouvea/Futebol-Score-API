@@ -7,6 +7,9 @@ export default class MatchesController {
   constructor(private matchesService: IMatcheservice<Matches | IMatches>) { }
 
   async getAll(req: Request, res: Response, _next: NextFunction): Promise<Response | void> {
+    const { inProgress } = req.query;
+    console.log(inProgress);
+
     const matches = await this.matchesService.getAll();
 
     res.status(200).json(matches);
@@ -18,11 +21,5 @@ export default class MatchesController {
     const team = await this.matchesService.getById(Number(id));
 
     res.status(200).json(team);
-  }
-
-  async getByProgress(req: Request, res: Response, _next: NextFunction): Promise<Response | void> {
-    const matches = await this.matchesService.getByProgress();
-
-    res.status(200).json(matches);
   }
 }

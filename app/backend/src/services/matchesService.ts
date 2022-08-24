@@ -18,8 +18,8 @@ export default class MatchesService implements IMatcheservice<Matches> {
     return match;
   }
 
-  async getByProgress(): Promise<Matches[]> {
-    const matchs = await this.modelMatches.findAll({ where: { inProgress: true } });
+  async getByProgress(inProgress:boolean): Promise<Matches[]> {
+    const matchs = await this.modelMatches.findAll({ where: { inProgress } });
     return matchs;
   }
 }
