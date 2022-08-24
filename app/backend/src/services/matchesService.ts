@@ -2,9 +2,14 @@ import { CreateMatches, GoalsMatches } from '../interfaces/Matches/Matches';
 import HandleError from '../interfaces/Error/handleError';
 import Matches from '../database/models/matches';
 import { IMatcheservice } from '../interfaces/Matches/MatchesService';
+import Teams from '../database/models/teams';
+import { ITeamService } from '../interfaces/Teams/TeamsService';
 
 export default class MatchesService implements IMatcheservice<Matches> {
-  constructor(private modelMatches = Matches) {
+  constructor(
+    private modelMatches = Matches,
+    private teamService: ITeamService<Teams>,
+  ) {
     this.modelMatches = modelMatches;
   }
 
@@ -33,6 +38,17 @@ export default class MatchesService implements IMatcheservice<Matches> {
   }
 
   async createMatchProgress(data: CreateMatches): Promise<void> {
-    await this.modelMatches.update({ ...data }, { where: { id } });
+    const { homeTeam, awayTeam } = data;
+    if (homeTeam === awayTeam) {
+      throw new HandleError(
+        'Unauthorized',
+        'It is not possible to create a match with two equal teams',
+      );
+    }
+
+    await this.teamService.getById(homeTeam);
+    await this.teamService.getById(awayTeam);
+
+    await this.modelMatches.create({ ...data, inProgress: true });
   }
 }
