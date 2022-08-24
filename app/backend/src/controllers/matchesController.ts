@@ -47,4 +47,18 @@ export default class MatchesController {
       next(error);
     }
   }
+
+  async createMatchProgress(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const data = req.body;
+      const matchCreated = await this.matchesService.createMatchProgress(data);
+      return res.status(201).json(matchCreated);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
