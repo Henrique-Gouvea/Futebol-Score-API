@@ -31,7 +31,7 @@ export default class MatchesController {
     try {
       const { id } = req.params;
       await this.matchesService.updateProgress(Number(id), false);
-      return res.status(200).json({ message: 'Finished' });
+      return res.status(201).json({ message: 'Finished' });
     } catch (error) {
       next(error);
     }
@@ -56,7 +56,7 @@ export default class MatchesController {
     try {
       const data = req.body;
       const matchCreated = await this.matchesService.createMatchProgress(data);
-      return res.status(200).json(matchCreated);
+      return res.status(201).json(matchCreated);
     } catch (error) {
       next(error);
     }

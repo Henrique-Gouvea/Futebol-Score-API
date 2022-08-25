@@ -61,7 +61,7 @@ export default class MatchesService implements IMatcheservice<Matches> {
       await this.teamService.getById(homeTeam);
       await this.teamService.getById(awayTeam);
     } catch (error) {
-      throw new HandleError('Unauthorized', 'There is no team with such id!');
+      throw new HandleError('NotFound', 'There is no team with such id!');
     }
     const matchCreated = await this.modelMatches.create({ ...data, inProgress: true });
     return matchCreated;
