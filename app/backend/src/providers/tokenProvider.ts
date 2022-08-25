@@ -6,7 +6,7 @@ import HandleError from '../interfaces/Error/handleError';
 class tokenProvider implements IToken {
   private jwtSecret: string;
   constructor() {
-    this.jwtSecret = process.env.JWT_SECRET || 'hardPassword';
+    this.jwtSecret = process.env.JWT_SECRET || 'jwt_secret';
   }
 
   generateToken(email: string): string {
