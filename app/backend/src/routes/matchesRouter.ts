@@ -13,6 +13,11 @@ const tokenMiddleware = new TokenMiddleware(tokenProv);
 const matchesRouter = Router();
 
 matchesRouter.get('/', (req, res, next) => matchesController.getAll(req, res, next));
+matchesRouter.post(
+  '/',
+  (req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next),
+  (req, res, next) => matchesController.createMatchProgress(req, res, next),
+);
 
 matchesRouter.patch(
   '/:id',
@@ -23,9 +28,5 @@ matchesRouter.patch(
   '/:id/finish',
   (req, res, next) => matchesController.updateProgress(req, res, next),
 );
-
-matchesRouter.use((req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next));
-
-matchesRouter.post('/', (req, res, next) => matchesController.createMatchProgress(req, res, next));
 
 export default matchesRouter;
