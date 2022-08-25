@@ -17,7 +17,12 @@ export default class MatchesService implements IMatcheservice<Matches> {
   }
 
   async getAll() : Promise<Matches[]> {
-    const matches: Matches[] = await this.modelMatches.findAll();
+    const matches: Matches[] = await this.modelMatches.findAll({
+      include: [
+        { model: Teams, as: 'teamHome', attributes: ['teamName'] },
+        { model: Teams, as: 'teamAway', attributes: ['teamName'] },
+      ],
+    });
     return matches;
   }
 
@@ -52,12 +57,8 @@ export default class MatchesService implements IMatcheservice<Matches> {
       await this.teamService.getById(homeTeam);
       await this.teamService.getById(awayTeam);
     } catch (error) {
-      throw new HandleError(
-        'Unauthorized',
-        'There is no team with such id!',
-      );
+      throw new HandleError('Unauthorized', 'There is no team with such id!');
     }
-
     const matchCreated = await this.modelMatches.create({ ...data, inProgress: true });
     return matchCreated;
   }
