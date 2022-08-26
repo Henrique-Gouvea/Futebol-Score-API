@@ -14,7 +14,15 @@ const learderboard = new LearderboardController(learderboardService);
 
 const leaderboardRouter = Router();
 
-leaderboardRouter.get('/home', (req, res, next) => learderboard.login(req, res, next));
+leaderboardRouter.get(
+  '/home',
+  (req, res, next) => learderboard.getMatchersFinished(req, res, next),
+);
+
+leaderboardRouter.get(
+  '/away',
+  (req, res, next) => learderboard.getMatchersFinished(req, res, next),
+);
 
 // leaderboardRouter.use((req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next));
 

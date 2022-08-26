@@ -6,4 +6,14 @@ export default class LearderboardService {
   ) {
     this.modelUser = modelUser;
   }
+
+  async getMatchersFinished() : Promise<Matches[]> {
+    const matches: Matches[] = await this.modelMatches.findAll({
+      include: [
+        { model: Teams, as: 'teamHome', attributes: ['teamName'] },
+        { model: Teams, as: 'teamAway', attributes: ['teamName'] },
+      ],
+    });
+    return matches;
+  }
 }
