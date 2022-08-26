@@ -7,4 +7,5 @@ export interface IMatcheservice<T>{
   updateProgress(id: number, finish: boolean): Promise<void>
   updateGoals(id: number, data: GoalsMatches): Promise<void>
   createMatchProgress(data: CreateMatches): Promise<CreateMatches>
+  getMatchersFinished() : Promise<T[]>
 }

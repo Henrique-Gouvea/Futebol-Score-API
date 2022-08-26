@@ -1,3 +1,3 @@
 export interface ILearderboardService<T>{
-  getMatchersFinished(homeOrAway:string) : Promise<T[]>
+  getClassification(homeOrAway:string) : Promise<T[]>
 }

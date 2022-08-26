@@ -66,4 +66,9 @@ export default class MatchesService implements IMatcheservice<Matches> {
     const matchCreated = await this.modelMatches.create({ ...data, inProgress: true });
     return matchCreated;
   }
+
+  async getMatchersFinished() : Promise<Matches[]> {
+    const teste = await this.modelMatches.findAll({ where: { inProgress: false } });
+    return teste;
+  }
 }
