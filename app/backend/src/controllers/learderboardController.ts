@@ -9,6 +9,8 @@ export default class LearderboardController {
     try {
       const { path } = req.route;
       const homeOrAway: string = path.replace(/\//g, '');
+      console.log(homeOrAway);
+
       const matchersFinished:
       ILearderboard[] = await this.learderboardService.getClassification(homeOrAway);
       res.status(200).json(matchersFinished);

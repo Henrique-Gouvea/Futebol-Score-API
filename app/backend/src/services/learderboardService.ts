@@ -21,40 +21,40 @@ export default class LearderboardService implements ILearderboardService<ILearde
   }
 
   dataAwayTeam = (matchs:any[], id: number) => {
-    let pointsAway = 0; let gamesAway = 0; let victoriesAway = 0; let drawsAway = 0;
-    let lossesAway = 0; let goalsFavorAway = 0; let goalsOwnAway = 0;
+    let points = 0; let games = 0; let victories = 0; let draws = 0;
+    let losses = 0; let goalsFavor = 0; let goalsOwn = 0;
 
     matchs.forEach((mat) => {
       if (mat.awayTeam === id) {
         if (mat.awayTeamGoals > mat.homeTeamGoals) {
-          pointsAway += 3; victoriesAway += 1;
+          points += 3; victories += 1;
         }
-        if (mat.awayTeamGoals === mat.homeTeamGoals) { pointsAway += 1; drawsAway += 1; }
-        gamesAway += 1; goalsFavorAway += mat.awayTeamGoals; goalsOwnAway += mat.homeTeamGoals;
-        if (mat.awayTeamGoals < mat.homeTeamGoals) lossesAway += 1;
+        if (mat.awayTeamGoals === mat.homeTeamGoals) { points += 1; draws += 1; }
+        games += 1; goalsFavor += mat.awayTeamGoals; goalsOwn += mat.homeTeamGoals;
+        if (mat.awayTeamGoals < mat.homeTeamGoals) losses += 1;
       }
     });
     return {
-      pointsAway, victoriesAway, lossesAway, gamesAway, goalsFavorAway, goalsOwnAway, drawsAway,
+      points, victories, losses, games, goalsOwn, goalsFavor, draws,
     };
   };
 
   dataHomeTeam = (matchs:any[], id: number) => {
-    let pointsHome = 0; let victoriesHome = 0; let lossesHome = 0; let gamesHome = 0;
-    let goalsOwnHome = 0; let goalsFavorHome = 0; let drawsHome = 0;
+    let points = 0; let victories = 0; let losses = 0; let games = 0;
+    let goalsOwn = 0; let goalsFavor = 0; let draws = 0;
 
     matchs.forEach((mat) => {
       if (mat.homeTeam === id) {
         if (mat.awayTeamGoals < mat.homeTeamGoals) {
-          pointsHome += 3; victoriesHome += 1;
+          points += 3; victories += 1;
         }
-        if (mat.awayTeamGoals === mat.homeTeamGoals) { pointsHome += 1; drawsHome += 1; }
-        gamesHome += 1; goalsOwnHome += mat.awayTeamGoals; goalsFavorHome += mat.homeTeamGoals;
-        if (mat.awayTeamGoals > mat.homeTeamGoals) lossesHome += 1;
+        if (mat.awayTeamGoals === mat.homeTeamGoals) { points += 1; draws += 1; }
+        games += 1; goalsOwn += mat.awayTeamGoals; goalsFavor += mat.homeTeamGoals;
+        if (mat.awayTeamGoals > mat.homeTeamGoals) losses += 1;
       }
     });
     return {
-      pointsHome, victoriesHome, lossesHome, gamesHome, goalsOwnHome, goalsFavorHome, drawsHome,
+      points, victories, losses, games, goalsOwn, goalsFavor, draws,
     };
   };
 
@@ -81,23 +81,18 @@ export default class LearderboardService implements ILearderboardService<ILearde
     return Number(((points / gameTriple) * 100).toFixed(2));
   };
 
-  createObjClassification(team:ITeam, matchersFinished: any[], homeOrAway:string): ILearderboard {
-    const { pointsHome, victoriesHome, lossesHome, gamesHome, goalsOwnHome, goalsFavorHome,
-      drawsHome } = this.dataHomeTeam(matchersFinished, team.id);
-    const { pointsAway, victoriesAway, lossesAway, gamesAway, goalsFavorAway, goalsOwnAway,
-      drawsAway } = this.dataAwayTeam(matchersFinished, team.id);
+  createObjClassification(home:any, away: any, team: any, all:boolean, teste:any): ILearderboard {
     const classification = { name: team.teamName,
-      totalPoints: homeOrAway === 'home' ? pointsHome : pointsAway,
-      totalGames: homeOrAway === 'home' ? gamesHome : gamesAway,
-      totalVictories: homeOrAway === 'home' ? victoriesHome : victoriesAway,
-      totalDraws: homeOrAway === 'home' ? drawsHome : drawsAway,
-      totalLosses: homeOrAway === 'home' ? lossesHome : lossesAway,
-      goalsFavor: homeOrAway === 'home' ? goalsFavorHome : goalsFavorAway,
-      goalsOwn: homeOrAway === 'home' ? goalsOwnHome : goalsOwnAway,
-      goalsBalance: homeOrAway === 'home'
-        ? goalsFavorHome - goalsOwnHome : goalsFavorAway - goalsOwnAway,
-      efficiency: homeOrAway === 'home'
-        ? this.calcEfficiency(pointsHome, gamesHome) : this.calcEfficiency(pointsAway, gamesAway),
+      totalPoints: all? home.points + away.points : teste.points,
+      totalGames: all? home.games + away.games : teste.games,
+      totalVictories: all? home.victories + away.victories : teste.victories,
+      totalDraws: all? home.draws + away.draws : teste.draws,
+      totalLosses: all? home.losses + away.losses : teste.losses,
+      goalsFavor: all? home.goalsFavor + away.goalsFavor : teste.goalsFavor,
+      goalsOwn: all? home.goalsOwn + away.goalsOwn : teste.goalsOwn,
+      goalsBalance: all
+      ? ((home.goalsFavor - home.goalsOwn)+away.goalsFavor - away.goalsOwn) : teste.goalsFavor - teste.goalsOwn,
+      efficiency: this.calcEfficiency(home.points+away.points, home.games+away.games),
     };
     return classification;
   }
@@ -105,11 +100,20 @@ export default class LearderboardService implements ILearderboardService<ILearde
   async getClassification(homeOrAway:string) : Promise<ILearderboard[]> {
     const matchersFinished = await this.matchesService.getMatchersFinished();
     const arrClassification:ILearderboard[] = [];
+    let homeDataPoints = [] as any;
+    let awayDataPoints = [] as any;
+    let all:boolean = false;
+    let teste = [] as any;
     const teams = await this.teamService.getAll();
     teams.forEach((teamElement) => {
       const team = teamElement as unknown as ITeam;
+      homeDataPoints = this.dataHomeTeam(matchersFinished, team.id);
+      awayDataPoints = this.dataAwayTeam(matchersFinished, team.id);
+      if(!homeOrAway) all = true;
+      if(homeOrAway ==='away') teste = awayDataPoints;
+      if(homeOrAway === 'home') teste = homeDataPoints;
       const objClassification: ILearderboard = this
-        .createObjClassification(team, matchersFinished, homeOrAway);
+        .createObjClassification(homeDataPoints, awayDataPoints, team, all, teste);
       arrClassification.push(objClassification);
     });
     const classificationOrder: ILearderboard[] = arrClassification.sort(this.tiebreaker);

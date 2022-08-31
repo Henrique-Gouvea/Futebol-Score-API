@@ -24,6 +24,11 @@ leaderboardRouter.get(
   (req, res, next) => learderboard.getClassification(req, res, next),
 );
 
+leaderboardRouter.get(
+  '/',
+  (req, res, next) => learderboard.getClassification(req, res, next),
+);
+
 // leaderboardRouter.use((req, res, next) => tokenMiddleware.checkTokenMiddleware(req, res, next));
 
 export default leaderboardRouter;
