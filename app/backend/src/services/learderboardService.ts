@@ -81,18 +81,21 @@ export default class LearderboardService implements ILearderboardService<ILearde
     return Number(((points / gameTriple) * 100).toFixed(2));
   };
 
-  createObjClassification(home:any, away: any, team: any, all:boolean, teste:any): ILearderboard {
+  createObjClassification(home:any, away: any, team: any, all:boolean, homeOrAwayData:any): ILearderboard {
     const classification = { name: team.teamName,
-      totalPoints: all? home.points + away.points : teste.points,
-      totalGames: all? home.games + away.games : teste.games,
-      totalVictories: all? home.victories + away.victories : teste.victories,
-      totalDraws: all? home.draws + away.draws : teste.draws,
-      totalLosses: all? home.losses + away.losses : teste.losses,
-      goalsFavor: all? home.goalsFavor + away.goalsFavor : teste.goalsFavor,
-      goalsOwn: all? home.goalsOwn + away.goalsOwn : teste.goalsOwn,
+      totalPoints: all? home.points + away.points : homeOrAwayData.points,
+      totalGames: all? home.games + away.games : homeOrAwayData.games,
+      totalVictories: all? home.victories + away.victories : homeOrAwayData.victories,
+      totalDraws: all? home.draws + away.draws : homeOrAwayData.draws,
+      totalLosses: all? home.losses + away.losses : homeOrAwayData.losses,
+      goalsFavor: all? home.goalsFavor + away.goalsFavor : homeOrAwayData.goalsFavor,
+      goalsOwn: all? home.goalsOwn + away.goalsOwn : homeOrAwayData.goalsOwn,
       goalsBalance: all
-      ? ((home.goalsFavor - home.goalsOwn)+away.goalsFavor - away.goalsOwn) : teste.goalsFavor - teste.goalsOwn,
-      efficiency: this.calcEfficiency(home.points+away.points, home.games+away.games),
+      ? ((home.goalsFavor - home.goalsOwn)+away.goalsFavor - away.goalsOwn)
+      : homeOrAwayData.goalsFavor - homeOrAwayData.goalsOwn,
+      efficiency: all
+      ? this.calcEfficiency(home.points+away.points, home.games+away.games)
+      : this.calcEfficiency(homeOrAwayData.points, homeOrAwayData.games),
     };
     return classification;
   }
@@ -103,17 +106,17 @@ export default class LearderboardService implements ILearderboardService<ILearde
     let homeDataPoints = [] as any;
     let awayDataPoints = [] as any;
     let all:boolean = false;
-    let teste = [] as any;
+    let homeOrAwayData = [] as any;
     const teams = await this.teamService.getAll();
     teams.forEach((teamElement) => {
       const team = teamElement as unknown as ITeam;
       homeDataPoints = this.dataHomeTeam(matchersFinished, team.id);
       awayDataPoints = this.dataAwayTeam(matchersFinished, team.id);
       if(!homeOrAway) all = true;
-      if(homeOrAway ==='away') teste = awayDataPoints;
-      if(homeOrAway === 'home') teste = homeDataPoints;
+      if(homeOrAway ==='away') homeOrAwayData = awayDataPoints;
+      if(homeOrAway === 'home') homeOrAwayData = homeDataPoints;
       const objClassification: ILearderboard = this
-        .createObjClassification(homeDataPoints, awayDataPoints, team, all, teste);
+        .createObjClassification(homeDataPoints, awayDataPoints, team, all, homeOrAwayData);
       arrClassification.push(objClassification);
     });
     const classificationOrder: ILearderboard[] = arrClassification.sort(this.tiebreaker);
